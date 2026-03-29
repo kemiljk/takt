@@ -1,0 +1,15 @@
+@layer components {
+  .rhythm-overlay {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--rhythm-unit) - 1px),
+      color-mix(in oklch, var(--c-accent) 15%, transparent) calc(var(--rhythm-unit) - 1px),
+      color-mix(in oklch, var(--c-accent) 15%, transparent) var(--rhythm-unit)
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+}

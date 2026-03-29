@@ -1,0 +1,123 @@
+@layer components {
+  .takt-slider {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .takt-slider__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .takt-slider__label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--c-fg);
+  }
+
+  .takt-slider__value {
+    font-variant-numeric: tabular-nums;
+    color: var(--c-fg-muted);
+    font-size: 0.875rem;
+    min-inline-size: 2.5rem;
+    text-align: end;
+  }
+
+  .takt-slider__track-wrapper {
+    position: relative;
+    padding-block: 0.5rem;
+  }
+
+  .takt-slider__input {
+    inline-size: 100%;
+    height: 6px;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+
+    /* Webkit browsers */
+    &::-webkit-slider-thumb {
+      appearance: none;
+      inline-size: 20px;
+      block-size: 20px;
+      background: var(--c-accent);
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      margin-block-start: -7px;
+
+      &:hover {
+        background: color-mix(in oklch, var(--c-accent) 110%, transparent);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--c-accent);
+        outline-offset: 2px;
+      }
+    }
+
+    &::-webkit-slider-runnable-track {
+      background: linear-gradient(
+        to right,
+        var(--c-accent) 0%,
+        var(--c-accent) var(--slider-percent),
+        var(--c-border-subtle) var(--slider-percent),
+        var(--c-border-subtle) 100%
+      );
+      height: 6px;
+      border: none;
+    }
+
+    /* Firefox */
+    &::-moz-range-thumb {
+      inline-size: 20px;
+      block-size: 20px;
+      background: var(--c-accent);
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      margin-block-start: -7px;
+
+      &:hover {
+        background: color-mix(in oklch, var(--c-accent) 110%, transparent);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--c-accent);
+        outline-offset: 2px;
+      }
+    }
+
+    &::-moz-range-track {
+      background: transparent;
+      border: none;
+    }
+
+    &::-moz-range-progress {
+      background: var(--c-accent);
+      height: 6px;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .takt-slider__target {
+    position: absolute;
+    inset-block-start: -4px;
+    inset-inline-start: 0;
+    inline-size: 12px;
+    block-size: 12px;
+    background: var(--c-accent-dim);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    pointer-events: none;
+    transform: translateX(-50%);
+    z-index: 0;
+  }
+}

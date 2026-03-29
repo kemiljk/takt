@@ -1,0 +1,100 @@
+@takt/core Package - Complete Implementation
+============================================
+
+CREATED FILES:
+
+Configuration:
+  package.json          - Project metadata, dependencies, build scripts
+  tsconfig.json         - TypeScript configuration extending root config
+  tsup.config.ts        - Build configuration for ESM output with types
+
+Type Definitions (src/):
+  types.ts              - All shared interfaces:
+                         * FontMetrics, NormalisedFontMetrics
+                         * TaktInput, TaktConfig, TaktStep, TaktSpacing
+
+Core Modules (src/):
+  utils.ts              - Shared utility functions:
+                         * lerp, inverseLerp, remap (interpolation)
+                         * roundTo (precision rounding)
+                         * generateClamp (CSS clamp() generation)
+
+  metrics.ts            - Font metrics handling:
+                         * normaliseMetrics() - compute ratios from raw metrics
+                         * unpackFont() - async font loading via @capsizecss/unpack
+
+  scale.ts              - Type scale generation:
+                         * generateScale() - creates font size steps
+                         * Naming: xs, sm, base, lg, xl, 2xl, 3xl, 4xl, etc.
+                         * Fluid values: clamp(minRem, calc(...), maxRem)
+
+  lineHeight.ts         - Intelligent line-height computation:
+                         * inverseLerp-based curve (small=1.6 to large=1.1)
+                         * x-height ratio adjustment
+                         * Includes reasoning/explanation string
+
+  letterSpacing.ts      - Letter spacing computation:
+                         * Smooth curve from +0.02em (small) to -0.04em (display)
+                         * Width ratio modifier for font-specific adjustment
+
+  trim.ts               - Text trimming using Capsize:
+                         * computeTrim() integrates @capsizecss/core
+                         * Generates both capsize and text-box-trim values
+
+  spacing.ts            - Spacing scale from rhythm unit:
+                         * SPACING_SCALE: 3xs to 5xl (13 steps)
+                         * Rhythmic based on body line-height
+                         * Fluid scaling: 85% at mobile, 100% at desktop
+
+  config.ts             - Main entry point:
+                         * createTaktConfig() orchestrates all computations
+                         * Applies defaults (baseSize=16, ratio=1.25, etc.)
+                         * Requires pre-resolved FontMetrics (use unpackFont first)
+
+Output Generators (src/output/):
+  css.ts                - generateCSS():
+                         * CSS custom properties (--font-size-*, --space-*, etc.)
+                         * Includes rhythm unit and font metrics
+
+  tailwind.ts           - generateTailwind():
+                         * Tailwind v4 theme config format
+                         * fontSize as [clamp, { lineHeight, letterSpacing }]
+                         * Spacing with fluid clamp values
+
+  tokens.ts             - generateTokens():
+                         * W3C DTCG design tokens JSON format
+                         * Structured groups: typography.fontSize, spacing, etc.
+                         * Each token includes $type and $value
+
+  json.ts               - generateJSON():
+                         * Simple pretty-print wrapper for TaktConfig
+
+Public API (src/):
+  index.ts              - Exports all functions and types:
+                         * Config creation, metrics, scale, typography
+                         * Output generators (CSS, Tailwind, tokens, JSON)
+                         * All types re-exported
+
+DESIGN FEATURES:
+
+- Pure functions (except unpackFont which is async I/O)
+- Strong TypeScript typing throughout
+- Modular: each concern in its own file
+- Testable: all functions individually exported
+- Interpolation-based algorithms for smooth curves
+- Viewport-aware fluid sizing (clamp values)
+- Font-aware adjustments (x-height, character width)
+- Multiple output formats for different ecosystems
+
+DEPENDENCIES:
+- @capsizecss/core: Text trimming library
+- @capsizecss/unpack: Font metric extraction
+- @capsizecss/metrics: Type definitions (optional)
+- typescript: 5.7+ for strict type checking
+- tsup: ESM build tool
+
+BUILD COMMANDS:
+  npm run build       - Compile to dist/ with types
+  npm run typecheck   - Verify TypeScript without emitting
+  npm run test        - Run tests with bun
+  npm run clean       - Remove dist/

@@ -1,0 +1,21 @@
+@layer components {
+  .metrics-vis {
+    inline-size: 100%;
+  }
+
+  .metrics-vis__svg {
+    inline-size: 100%;
+    block-size: auto;
+    max-inline-size: 400px;
+  }
+
+  .metrics-vis__text {
+    fill: var(--c-fg);
+    opacity: 0.2;
+  }
+
+  .metrics-vis__label {
+    font-size: 10px;
+    font-family: var(--font-martian-mono), ui-monospace, monospace;
+  }
+}

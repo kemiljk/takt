@@ -1,0 +1,35 @@
+@layer components {
+  .theme-toggle {
+    padding: 0.5rem;
+    background: var(--c-surface-raised);
+    border: 1px solid var(--c-border-subtle);
+    color: var(--c-fg);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-inline-size: 44px;
+    min-block-size: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: color-mix(in oklch, var(--c-surface-raised) 90%, var(--c-fg) 5%);
+      border-color: var(--c-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--c-accent);
+      outline-offset: 0;
+    }
+
+    &:active {
+      background: color-mix(in oklch, var(--c-surface-raised) 85%, var(--c-fg) 10%);
+    }
+  }
+
+  .theme-toggle__icon {
+    display: inline-block;
+    line-height: 1;
+  }
+}

@@ -1,0 +1,105 @@
+@layer reset, base, components, utilities;
+
+@layer reset {
+	*,
+	*::before,
+	*::after {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	html {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-size-adjust: none;
+	}
+}
+
+@layer base {
+	:root {
+		color-scheme: light dark;
+
+		--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+		--c-warm-hue: 75;
+
+		--c-black: oklch(0.14 0.012 var(--c-warm-hue));
+		--c-white: oklch(0.99 0.004 var(--c-warm-hue));
+
+		--c-accent: oklch(0.62 0.12 72);
+		--c-accent-dim: oklch(0.48 0.09 72);
+		--c-accent-secondary: oklch(0.58 0.1 190);
+
+		--c-muted: oklch(0.52 0.02 var(--c-warm-hue));
+		--c-border: oklch(0.86 0.02 var(--c-warm-hue));
+
+		--c-surface-0: oklch(0.94 0.018 var(--c-warm-hue));
+		--c-surface-1: oklch(0.965 0.012 var(--c-warm-hue));
+		--c-surface-2: oklch(0.995 0.006 var(--c-warm-hue));
+		--c-surface-3: oklch(1 0.004 var(--c-warm-hue));
+
+		--c-surface-0-dark: oklch(0.12 0.015 var(--c-warm-hue));
+		--c-surface-1-dark: oklch(0.16 0.018 var(--c-warm-hue));
+		--c-surface-2-dark: oklch(0.2 0.02 var(--c-warm-hue));
+		--c-surface-3-dark: oklch(0.24 0.022 var(--c-warm-hue));
+
+		--c-fg: light-dark(var(--c-black), var(--c-white));
+		--c-bg: light-dark(var(--c-surface-0), var(--c-surface-0-dark));
+		--c-fg-muted: light-dark(var(--c-muted), oklch(0.62 0.02 var(--c-warm-hue)));
+		--c-border-subtle: light-dark(var(--c-border), oklch(0.32 0.02 var(--c-warm-hue)));
+
+		--c-surface-raised: light-dark(var(--c-surface-1), var(--c-surface-1-dark));
+		--c-surface-card: light-dark(var(--c-surface-2), var(--c-surface-2-dark));
+		--c-surface-popover: light-dark(var(--c-surface-3), var(--c-surface-3-dark));
+
+		--shadow-elevated: 0 1px 0 color-mix(in oklch, var(--c-black) 6%, transparent), 0 18px 48px
+			-12px color-mix(in oklch, var(--c-black) 14%, transparent);
+
+		--c-code-bg: oklch(0.13 0.015 var(--c-warm-hue));
+		--c-code-fg-soft: oklch(0.9 0.02 var(--c-warm-hue));
+
+		font-variant-numeric: tabular-nums;
+	}
+
+	html {
+		font-family: var(--font-host-grotesk), system-ui, sans-serif;
+		scrollbar-gutter: stable;
+	}
+
+	body {
+		color: var(--c-fg);
+		background-color: var(--c-bg);
+		line-height: 1.5;
+		min-block-size: 100dvh;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: 600;
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	code,
+	pre {
+		font-family: var(--font-martian-mono), ui-monospace, monospace;
+	}
+
+	a {
+		color: var(--c-accent);
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.15em;
+	}
+
+	::selection {
+		background: color-mix(in oklch, var(--c-accent) 25%, transparent);
+	}
+}
