@@ -42,6 +42,7 @@ export function Playground() {
 		() =>
 			createTaktConfig({
 				font: selectedFont.metrics,
+				familyName: selectedFont.name,
 				baseSize,
 				ratio,
 				stepsUp,
@@ -68,10 +69,6 @@ export function Playground() {
 		<div className="playground">
 			<div className="playground__layout">
 				<aside className="playground__config">
-					<header className="playground__brand">
-						<h1 className="playground__wordmark">takt</h1>
-					</header>
-
 					<div className="playground__config-scroll">
 						<ConfigPanel
 							fonts={CURATED_FONTS}

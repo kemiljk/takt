@@ -19,6 +19,7 @@ export interface NormalisedFontMetrics extends FontMetrics {
 
 export interface TaktInput {
   font: string | FontMetrics
+  familyName?: string
   baseSize?: number
   ratio?: number
   stepsUp?: number

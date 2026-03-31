@@ -90,6 +90,7 @@ export function buildShowcaseTokenMaps(font: CuratedFont): {
 } {
 	const config = createTaktConfig({
 		font: font.metrics,
+		familyName: font.name,
 		...DEFAULT_TAKT_INPUT,
 	})
 	return {
@@ -106,8 +107,16 @@ export function buildDualShowcaseTokenMaps(
 	takt: Record<string, string>
 	naive: Record<string, string>
 } {
-	const displayCfg = createTaktConfig({ font: displayFont.metrics, ...DEFAULT_TAKT_INPUT })
-	const bodyCfg = createTaktConfig({ font: bodyFont.metrics, ...DEFAULT_TAKT_INPUT })
+	const displayCfg = createTaktConfig({
+		font: displayFont.metrics,
+		familyName: displayFont.name,
+		...DEFAULT_TAKT_INPUT,
+	})
+	const bodyCfg = createTaktConfig({
+		font: bodyFont.metrics,
+		familyName: bodyFont.name,
+		...DEFAULT_TAKT_INPUT,
+	})
 
 	const dHero = step(displayCfg, '4xl')
 	const dTitle = step(displayCfg, 'xl')

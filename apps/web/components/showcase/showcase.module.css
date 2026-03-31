@@ -2,10 +2,10 @@
 	   Page shell
 	   ================================================================ */
 	.showcase-page {
-		min-height: calc(100dvh - var(--site-nav-gap));
+		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
-		padding: 0 1rem 5.5rem;
+		padding: var(--site-nav-gap) 1rem 5.5rem;
 		max-width: 72rem;
 		margin-inline: auto;
 	}

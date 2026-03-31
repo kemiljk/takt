@@ -2,8 +2,8 @@
 
 @layer components {
 	.docs {
-		min-height: calc(100dvh - var(--site-nav-gap));
-		padding-block-start: 0;
+		min-height: 100dvh;
+		padding-block-start: var(--site-nav-gap);
 		padding-block-end: 4rem;
 		background: var(--c-bg);
 		color: var(--c-fg);

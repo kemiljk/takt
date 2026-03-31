@@ -26,7 +26,7 @@ export function createTaktConfig(input: TaktInput): TaktConfig {
     throw new Error('Pass pre-resolved FontMetrics to createTaktConfig. Use unpackFont() first for async font loading.')
   }
 
-  const metrics = normaliseMetrics(resolved.font)
+  const metrics = normaliseMetrics(resolved.font, resolved.familyName ?? 'Unknown')
 
   // Generate type scale
   const scaleSteps = generateScale({

@@ -80,7 +80,6 @@
 		background-color: var(--c-bg);
 		line-height: 1.5;
 		min-block-size: 100dvh;
-		padding-block-start: var(--site-nav-gap);
 	}
 
 	h1,
