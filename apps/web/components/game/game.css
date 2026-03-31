@@ -116,6 +116,10 @@
 		padding: calc(var(--site-nav-gap) + 1.5rem) 1.5rem 1.5rem;
 		background: var(--c-bg);
 		gap: 1.25rem;
+
+		@media (max-width: 767px) {
+			padding-block-end: 14rem;
+		}
 	}
 
 	@media (min-width: 768px) {
@@ -179,6 +183,20 @@
 		flex-direction: column;
 		gap: 1.25rem;
 		min-width: 0;
+
+		@media (max-width: 767px) {
+			position: fixed;
+			inset-inline: 0;
+			inset-block-end: 0;
+			z-index: 100;
+			padding: 1rem 1.25rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
+			background: color-mix(in oklch, var(--c-surface-raised) 85%, transparent);
+			backdrop-filter: blur(18px) saturate(1.2);
+			-webkit-backdrop-filter: blur(18px) saturate(1.2);
+			border-block-start: 1px solid color-mix(in oklch, var(--c-border-subtle) 55%, transparent);
+			box-shadow: 0 -8px 24px -6px color-mix(in oklch, var(--c-black) 12%, transparent);
+			gap: 1rem;
+		}
 
 		@media (min-width: 768px) {
 			position: sticky;
@@ -252,6 +270,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.35rem;
+
+		@media (max-width: 767px) {
+			display: none;
+		}
 	}
 
 	.game-round__meta-line {
@@ -291,6 +313,10 @@
 		min-height: 12rem;
 		color: var(--c-fg);
 		word-break: break-word;
+
+		@media (max-width: 480px) {
+			padding: 1rem 1.15rem 1.15rem;
+		}
 	}
 
 	.game-round__preview-body-inner {
@@ -346,11 +372,6 @@
 	.game-round__lock {
 		inline-size: 100%;
 		padding: 0.75rem 1.5rem;
-
-		@media (max-width: 767px) {
-			max-inline-size: 20rem;
-			align-self: center;
-		}
 		font-size: 0.875rem;
 		font-weight: 600;
 		letter-spacing: 0.02em;
@@ -381,6 +402,13 @@
 		background: var(--c-surface-raised);
 		border: 1px solid var(--c-border-subtle);
 		border-radius: 12px;
+
+		@media (max-width: 767px) {
+			padding: 0.75rem 1rem;
+			gap: 0.5rem;
+			background: color-mix(in oklch, var(--c-surface-card) 50%, transparent);
+			border-color: color-mix(in oklch, var(--c-border-subtle) 40%, transparent);
+		}
 	}
 
 	.game-round__optimal {
@@ -406,6 +434,10 @@
 		line-height: 1.55;
 		margin: 0;
 		color: var(--c-fg-muted);
+
+		@media (max-width: 767px) {
+			display: none;
+		}
 	}
 
 	/* ===== Results Screen ===== */

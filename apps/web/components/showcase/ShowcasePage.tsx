@@ -7,6 +7,7 @@ import { PortfolioExample } from '@/components/showcase/examples/PortfolioExampl
 import { SaasExample } from '@/components/showcase/examples/SaasExample'
 import { ShowcaseToggle } from '@/components/showcase/ShowcaseToggle'
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
+import Link from 'next/link'
 import { useState } from 'react'
 import styles from './showcase.module.css'
 
@@ -29,6 +30,22 @@ export function ShowcasePage() {
 	const Example = activeMeta?.Component ?? SaasExample
 
 	return (
+		<>
+		<div className={styles['showcase-mobile-gate']}>
+			<div className={styles['showcase-mobile-gate__content']}>
+				<h1 className={styles['showcase-mobile-gate__title']}>Showcase</h1>
+				<p className={styles['showcase-mobile-gate__text']}>
+					The showcase displays six full-page site mocks with toggleable takt typography
+					— it needs a wider screen to do them justice.
+				</p>
+				<p className={styles['showcase-mobile-gate__text']}>
+					<strong>Open on desktop</strong> to compare metric-driven type with generic defaults.
+				</p>
+				<Link href="/" className={styles['showcase-mobile-gate__link']}>
+					← Back to takt
+				</Link>
+			</div>
+		</div>
 		<div className={styles['showcase-page']}>
 			<header className={styles['showcase-page__intro']}>
 				<h1 className={styles['showcase-page__title']}>Showcase</h1>
@@ -84,5 +101,6 @@ export function ShowcasePage() {
 
 			<ShowcaseToggle taktOn={taktOn} onTaktChange={setTaktOn} />
 		</div>
+		</>
 	)
 }

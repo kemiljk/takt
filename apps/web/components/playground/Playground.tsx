@@ -14,8 +14,10 @@ import { parseAsBoolean, parseAsFloat, parseAsInteger, parseAsString, useQuerySt
 import { useMemo, useState } from 'react'
 import { ConfigPanel } from './ConfigPanel'
 import { ExportPanel } from './ExportPanel'
+import { MobileLanding } from './MobileLanding'
 import { PreviewPanel } from './PreviewPanel'
 import './playground.css'
+import './mobile-landing.css'
 
 export function Playground() {
 	const [fontName, setFontName] = useQueryState('font', parseAsString.withDefault('Inter'))
@@ -66,6 +68,8 @@ export function Playground() {
 	)
 
 	return (
+		<>
+		<MobileLanding />
 		<div className="playground">
 			<div className="playground__layout">
 				<aside className="playground__config">
@@ -120,5 +124,6 @@ export function Playground() {
 				<ExportPanel outputs={outputs} />
 			</section>
 		</div>
+		</>
 	)
 }

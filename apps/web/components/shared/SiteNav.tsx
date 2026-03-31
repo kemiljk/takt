@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutGroup, motion } from 'motion/react'
 
-type NavItem = { href: string; label: string; external?: boolean }
+type NavItem = { href: string; label: string; external?: boolean; desktopOnly?: boolean }
 
 const NAV_ITEMS: NavItem[] = [
 	{ href: '/', label: 'Playground' },
-	{ href: '/showcase', label: 'Showcase' },
+	{ href: '/showcase', label: 'Showcase', desktopOnly: true },
 	{ href: '/game', label: 'takt test' },
 	{ href: '/docs', label: 'Docs' },
 ]
@@ -29,7 +29,7 @@ export function SiteNav() {
 						{NAV_ITEMS.map((item) => {
 							const active = !item.external && isActive(item.href)
 							return (
-								<li key={item.href} className="site-nav__item">
+								<li key={item.href} className={`site-nav__item${item.desktopOnly ? ' site-nav__item--desktop-only' : ''}`}>
 									{item.external ? (
 										<a
 											href={item.href}

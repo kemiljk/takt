@@ -34,6 +34,8 @@
 			background: color-mix(in oklch, var(--c-bg) 92%, transparent);
 			backdrop-filter: blur(10px);
 			border-block-end: 1px solid var(--c-border-subtle);
+			mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent 100%);
+			-webkit-mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent 100%);
 		}
 	}
 
