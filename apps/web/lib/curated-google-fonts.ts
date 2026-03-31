@@ -10,6 +10,8 @@ import {
 	Libre_Baskerville,
 	Literata,
 	Lora,
+	Michroma,
+	Nabla,
 	Newsreader,
 	Outfit,
 	Roboto_Slab,
@@ -139,6 +141,19 @@ const libreBaskerville = Libre_Baskerville({
 	style: ['normal', 'italic'],
 })
 
+const michroma = Michroma({
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-curated-michroma',
+	weight: '400',
+})
+
+const nabla = Nabla({
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-curated-nabla',
+})
+
 export const curatedPlaygroundFontVariableClasses = [
 	inter.variable,
 	instrumentSans.variable,
@@ -157,6 +172,8 @@ export const curatedPlaygroundFontVariableClasses = [
 	outfit.variable,
 	crimsonPro.variable,
 	libreBaskerville.variable,
+	michroma.variable,
+	nabla.variable,
 ].join(' ')
 
 const CURATED_FONT_FAMILY_CSS = {
@@ -179,6 +196,8 @@ const CURATED_FONT_FAMILY_CSS = {
 	Outfit: 'var(--font-curated-outfit)',
 	'Crimson Pro': 'var(--font-curated-crimson-pro)',
 	'Libre Baskerville': 'var(--font-curated-libre-baskerville)',
+	Michroma: 'var(--font-curated-michroma)',
+	Nabla: 'var(--font-curated-nabla)',
 	// Loaded via Google Fonts stylesheet in app/layout.tsx (next/font has no fallback metrics for this family).
 	'Atkinson Hyperlegible Next': '"Atkinson Hyperlegible Next", system-ui, sans-serif',
 } as const

@@ -1,121 +1,217 @@
 'use client'
-import { useState, useCallback } from 'react'
 import type { CuratedFont } from '@/lib/fonts-metrics'
 import { CURATED_FONTS } from '@/lib/fonts-metrics'
-import { GAME_CONTENTS, GAME_VIEWPORTS } from '@/lib/game-content'
-import type { GameContent } from '@/lib/game-content'
-import { IntroScreen } from './IntroScreen'
+import { GAME_COMPOSITIONS, type GameComposition } from '@/lib/game-content'
+import { computeLetterSpacing, computeLineHeight, normaliseMetrics } from '@takt/core'
+import { useCallback, useState } from 'react'
 import { GameRound } from './GameRound'
+import { IntroScreen } from './IntroScreen'
 import { ResultsScreen } from './ResultsScreen'
+import '@/components/shared/slider.css'
 import './game.css'
+
+export type ChallengeKind = 'line-height' | 'letter-spacing' | 'font-size' | 'spacing'
 
 type GamePhase = 'intro' | 'playing' | 'results'
 
+const TOLERANCES: Record<ChallengeKind, number> = {
+	'line-height': 0.08,
+	'letter-spacing': 0.006,
+	'font-size': 2.5,
+	spacing: 4,
+}
+
 export interface RoundSetup {
-  font: CuratedFont
-  content: GameContent
-  viewport: number
+	font: CuratedFont
+	challenge: ChallengeKind
+	composition: GameComposition
+	baseFontSize: number
+	headingFontSize: number
+	targetValue: number
+	sliderMin: number
+	sliderMax: number
+	sliderStep: number
+	unit: string
+	tolerance: number
+	lockedLineHeight: number
+	headingLineHeight: number
 }
 
 export interface RoundResult {
-  setup: RoundSetup
-  playerFontSize: number
-  playerLineHeight: number
-  optimalFontSize: number
-  optimalLineHeight: number
-  fontSizeScore: number
-  lineHeightScore: number
-  totalScore: number
+	setup: RoundSetup
+	playerValue: number
+	score: number
+}
+
+function shuffle<T>(array: T[]): T[] {
+	const a = [...array]
+	for (let i = a.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1))
+		const ai = a[i]
+		const aj = a[j]
+		if (ai === undefined || aj === undefined) continue
+		a[i] = aj
+		a[j] = ai
+	}
+	return a
+}
+
+function generateChallengeSequence(): ChallengeKind[] {
+	const kinds: ChallengeKind[] = ['line-height', 'letter-spacing', 'font-size', 'spacing']
+	const firstFour = shuffle([...kinds])
+	const pick = Math.floor(Math.random() * kinds.length)
+	const fifth = kinds[pick] ?? 'spacing'
+	return shuffle([...firstFour, fifth])
+}
+
+function buildRoundSetup(
+	font: CuratedFont,
+	composition: GameComposition,
+	challenge: ChallengeKind,
+): RoundSetup {
+	const metrics = normaliseMetrics(font.metrics, font.name)
+	const baseFontSize = Math.round(15 + Math.random() * 4)
+	const headingFontSize = Math.round(28 + Math.random() * 12)
+
+	const lineHeightBody = computeLineHeight(baseFontSize, metrics).value
+	const lineHeightHeading = computeLineHeight(headingFontSize, metrics).value
+	const letterSpacingHeading = computeLetterSpacing(headingFontSize, metrics).value
+	const rhythmUnit = baseFontSize * lineHeightBody
+
+	switch (challenge) {
+		case 'line-height':
+			return {
+				font,
+				challenge,
+				composition,
+				baseFontSize,
+				headingFontSize,
+				targetValue: lineHeightBody,
+				sliderMin: 1.0,
+				sliderMax: 2.0,
+				sliderStep: 0.01,
+				unit: '',
+				tolerance: TOLERANCES['line-height'],
+				lockedLineHeight: lineHeightBody,
+				headingLineHeight: lineHeightHeading,
+			}
+		case 'letter-spacing':
+			return {
+				font,
+				challenge,
+				composition,
+				baseFontSize,
+				headingFontSize,
+				targetValue: letterSpacingHeading,
+				sliderMin: -0.06,
+				sliderMax: 0.04,
+				sliderStep: 0.001,
+				unit: 'em',
+				tolerance: TOLERANCES['letter-spacing'],
+				lockedLineHeight: lineHeightBody,
+				headingLineHeight: lineHeightHeading,
+			}
+		case 'font-size':
+			return {
+				font,
+				challenge,
+				composition,
+				baseFontSize,
+				headingFontSize,
+				targetValue: baseFontSize,
+				sliderMin: 10,
+				sliderMax: 32,
+				sliderStep: 0.5,
+				unit: 'px',
+				tolerance: TOLERANCES['font-size'],
+				lockedLineHeight: lineHeightBody,
+				headingLineHeight: lineHeightHeading,
+			}
+		case 'spacing':
+			return {
+				font,
+				challenge,
+				composition,
+				baseFontSize,
+				headingFontSize,
+				targetValue: rhythmUnit,
+				sliderMin: 4,
+				sliderMax: 64,
+				sliderStep: 1,
+				unit: 'px',
+				tolerance: TOLERANCES.spacing,
+				lockedLineHeight: lineHeightBody,
+				headingLineHeight: lineHeightHeading,
+			}
+	}
 }
 
 function generateRounds(): RoundSetup[] {
-  const shuffledFonts = [...CURATED_FONTS].sort(() => Math.random() - 0.5)
-  const shuffledContents = [...GAME_CONTENTS].sort(() => Math.random() - 0.5)
-  
-  // Ensure content type variety: try to pick different types
-  const contentTypes = ['article', 'pullquote', 'card', 'caption', 'navigation'] as const
-  const pickedContents: GameContent[] = []
-  for (const type of contentTypes) {
-    const match = shuffledContents.find(c => c.type === type && !pickedContents.includes(c))
-    if (match) pickedContents.push(match)
-  }
-  // Fill remaining with random
-  while (pickedContents.length < 5) {
-    const next = shuffledContents.find(c => !pickedContents.includes(c))
-    if (next) pickedContents.push(next)
-    else break
-  }
+	const fonts = shuffle([...CURATED_FONTS]).slice(0, 5)
+	const compositions = shuffle([...GAME_COMPOSITIONS])
+	const challenges = generateChallengeSequence()
 
-  const shuffledViewports = [...GAME_VIEWPORTS].sort(() => Math.random() - 0.5)
-
-  return Array.from({ length: 5 }, (_, i) => ({
-    font: shuffledFonts[i]!,
-    content: pickedContents[i]!,
-    viewport: shuffledViewports[i % shuffledViewports.length]!,
-  }))
+	return Array.from({ length: 5 }, (_, i) => {
+		const font = fonts[i]
+		const composition = compositions[i]
+		const challenge = challenges[i]
+		if (!font || !composition || !challenge) {
+			throw new Error('generateRounds: missing font, composition, or challenge')
+		}
+		return buildRoundSetup(font, composition, challenge)
+	})
 }
 
-// Bell curve scoring: closer = higher score
 function scoreValue(player: number, optimal: number, tolerance: number): number {
-  const delta = Math.abs(player - optimal)
-  // Gaussian-ish curve: score = 100 * e^(-(delta/tolerance)^2)
-  const score = 100 * Math.exp(-Math.pow(delta / tolerance, 2))
-  return Math.round(score)
+	const delta = Math.abs(player - optimal)
+	return Math.round(100 * Math.exp(-((delta / tolerance) ** 2)))
 }
 
 export function GameClient() {
-  const [phase, setPhase] = useState<GamePhase>('intro')
-  const [rounds, setRounds] = useState<RoundSetup[]>([])
-  const [results, setResults] = useState<RoundResult[]>([])
-  const [currentRound, setCurrentRound] = useState(0)
+	const [phase, setPhase] = useState<GamePhase>('intro')
+	const [rounds, setRounds] = useState<RoundSetup[]>([])
+	const [results, setResults] = useState<RoundResult[]>([])
+	const [currentRound, setCurrentRound] = useState(0)
 
-  const startGame = useCallback(() => {
-    setRounds(generateRounds())
-    setResults([])
-    setCurrentRound(0)
-    setPhase('playing')
-  }, [])
+	const startGame = useCallback(() => {
+		setRounds(generateRounds())
+		setResults([])
+		setCurrentRound(0)
+		setPhase('playing')
+	}, [])
 
-  const submitRound = useCallback((playerFontSize: number, playerLineHeight: number, optimalFontSize: number, optimalLineHeight: number) => {
-    const fontSizeScore = scoreValue(playerFontSize, optimalFontSize, 3) // ±3px tolerance
-    const lineHeightScore = scoreValue(playerLineHeight, optimalLineHeight, 0.1) // ±0.1 tolerance
+	const submitRound = useCallback(
+		(playerValue: number) => {
+			const setup = rounds[currentRound]
+			if (!setup) return
+			const score = scoreValue(playerValue, setup.targetValue, setup.tolerance)
+			const result: RoundResult = { setup, playerValue, score }
+			setResults((prev) => [...prev, result])
 
-    const result: RoundResult = {
-      setup: rounds[currentRound]!,
-      playerFontSize,
-      playerLineHeight,
-      optimalFontSize,
-      optimalLineHeight,
-      fontSizeScore,
-      lineHeightScore,
-      totalScore: Math.round((fontSizeScore + lineHeightScore) / 2),
-    }
+			if (currentRound < 4) {
+				setTimeout(() => setCurrentRound((c) => c + 1), 2000)
+			} else {
+				setTimeout(() => setPhase('results'), 2500)
+			}
+		},
+		[rounds, currentRound],
+	)
 
-    const newResults = [...results, result]
-    setResults(newResults)
+	const content = (() => {
+		if (phase === 'intro') return <IntroScreen onStart={startGame} />
+		if (phase === 'results') return <ResultsScreen results={results} onPlayAgain={startGame} />
+		const setup = rounds[currentRound]
+		if (!setup) return null
+		return (
+			<GameRound
+				key={currentRound}
+				round={currentRound + 1}
+				totalRounds={5}
+				setup={setup}
+				onSubmit={submitRound}
+			/>
+		)
+	})()
 
-    if (currentRound < 4) {
-      // Short delay then next round
-      setTimeout(() => setCurrentRound(c => c + 1), 2000)
-    } else {
-      // Game over
-      setTimeout(() => setPhase('results'), 2500)
-    }
-  }, [rounds, currentRound, results])
-
-  if (phase === 'intro') return <IntroScreen onStart={startGame} />
-  if (phase === 'results') return <ResultsScreen results={results} onPlayAgain={startGame} />
-  
-  const setup = rounds[currentRound]
-  if (!setup) return null
-
-  return (
-    <GameRound
-      key={currentRound}
-      round={currentRound + 1}
-      totalRounds={5}
-      setup={setup}
-      onSubmit={submitRound}
-    />
-  )
+	return <>{content}</>
 }

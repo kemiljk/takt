@@ -50,7 +50,8 @@
 
     & pre {
       margin: 0;
-      background: transparent;
+      background: transparent !important;
+      background-image: none !important;
       border: none;
       padding: 0;
       font-family: var(--font-martian-mono), ui-monospace, monospace;

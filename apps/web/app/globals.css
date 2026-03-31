@@ -29,7 +29,7 @@
 
 		--c-accent: oklch(0.62 0.12 72);
 		--c-accent-dim: oklch(0.48 0.09 72);
-		--c-accent-secondary: oklch(0.58 0.1 190);
+		--c-accent-secondary: oklch(0.52 0.08 55);
 
 		--c-muted: oklch(0.52 0.02 var(--c-warm-hue));
 		--c-border: oklch(0.86 0.02 var(--c-warm-hue));
@@ -56,10 +56,18 @@
 		--shadow-elevated: 0 1px 0 color-mix(in oklch, var(--c-black) 6%, transparent), 0 18px 48px
 			-12px color-mix(in oklch, var(--c-black) 14%, transparent);
 
-		--c-code-bg: oklch(0.13 0.015 var(--c-warm-hue));
-		--c-code-fg-soft: oklch(0.9 0.02 var(--c-warm-hue));
+		--c-code-bg: light-dark(
+			oklch(0.9 0.024 var(--c-warm-hue)),
+			oklch(0.27 0.034 var(--c-warm-hue))
+		);
+		--c-code-fg-soft: light-dark(
+			oklch(0.26 0.032 var(--c-warm-hue)),
+			oklch(0.88 0.026 var(--c-warm-hue))
+		);
 
 		font-variant-numeric: tabular-nums;
+
+		--site-nav-gap: 4.5rem;
 	}
 
 	html {
@@ -72,6 +80,7 @@
 		background-color: var(--c-bg);
 		line-height: 1.5;
 		min-block-size: 100dvh;
+		padding-block-start: var(--site-nav-gap);
 	}
 
 	h1,

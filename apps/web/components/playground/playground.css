@@ -1,9 +1,11 @@
+@layer reset, base, components, utilities;
+
 @layer components {
 	.playground {
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: minmax(0, 1fr) auto;
-		min-height: 100dvh;
+		min-height: calc(100dvh - var(--site-nav-gap));
 		background-color: var(--c-bg);
 		color: var(--c-fg);
 	}
@@ -47,7 +49,7 @@
 		margin: 0;
 		font-family: var(--font-takt-wordmark), ui-serif, Georgia, serif;
 		font-size: 1.875rem;
-		font-weight: 00;
+		font-weight: 900;
 		font-synthesis: none;
 		letter-spacing: -0.04em;
 		line-height: 1.05;
@@ -512,10 +514,10 @@
 		text-wrap: pretty;
 	}
 
-	.preview__article-body .rhythm-overlay {
+	.rhythm-overlay {
 		position: absolute;
 		inset: 0;
-		border-radius: 0;
+		border-radius: 12px;
 		background-image: repeating-linear-gradient(
 			to bottom,
 			transparent,
@@ -524,7 +526,7 @@
 			color-mix(in oklch, var(--c-accent) 22%, transparent) var(--rhythm-unit)
 		);
 		pointer-events: none;
-		z-index: 0;
+		z-index: 2;
 	}
 
 	.export {

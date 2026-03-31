@@ -15,7 +15,11 @@ export function CodeBlock({ code, language, title }: CodeBlockProps) {
 	useEffect(() => {
 		codeToHtml(code, {
 			lang: language,
-			theme: 'solarized-dark',
+			themes: {
+				light: 'gruvbox-light-medium',
+				dark: 'gruvbox-dark-medium',
+			},
+			defaultColor: 'light-dark()',
 		}).then(setHtml)
 	}, [code, language])
 

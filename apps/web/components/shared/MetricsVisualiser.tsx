@@ -35,13 +35,17 @@ export function MetricsVisualiser({ metrics, fontFamily }: MetricsVisualiserProp
     { y: descentY, label: 'Descent', color: 'oklch(0.7 0.15 280)' },
   ]
 
+  const lineEndX = 268
+  const labelX = 396
+
   return (
     <div className="metrics-vis">
-      <svg viewBox="0 0 320 260" className="metrics-vis__svg">
-        {/* Letter "Hg" */}
+      <svg viewBox="0 0 400 260" className="metrics-vis__svg">
+        {/* Letter "Hg" — start-aligned so glyphs stay clear of right-side labels */}
         <text
-          x="40"
+          x="8"
           y={baselineY}
+          textAnchor="start"
           className="metrics-vis__text"
           style={{ fontFamily: fontFamily || 'inherit', fontSize: `${metrics.capHeightRatio * scale * 1.4}px` }}
         >
@@ -52,15 +56,17 @@ export function MetricsVisualiser({ metrics, fontFamily }: MetricsVisualiserProp
         {lines.map(line => (
           <g key={line.label}>
             <line
-              x1="0" x2="320"
-              y1={line.y} y2={line.y}
+              x1="0"
+              x2={lineEndX}
+              y1={line.y}
+              y2={line.y}
               stroke={line.color}
               strokeWidth="1"
               strokeDasharray="4 3"
               opacity="0.7"
             />
             <text
-              x="310"
+              x={labelX}
               y={line.y - 4}
               textAnchor="end"
               fill={line.color}
